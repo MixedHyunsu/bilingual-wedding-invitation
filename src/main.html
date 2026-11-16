@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko" data-font="{{FONT_KO}}" data-font-en="{{FONT_EN}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <title>{{GROOM_NAME}} ❤️ {{BRIDE_NAME}} 결혼합니다 🎉</title>
+  <meta name="description" content="{{WEDDING_DATETIME_KO}} {{VENUE_NAME}} {{VENUE_HALL}}. {{GROOM_NAME}} ♥ {{BRIDE_NAME}} 결혼합니다." />
+
+  <!-- 카카오톡/SNS 공유 미리보기 (Open Graph)
+       주의: og:image는 반드시 절대 URL이어야 카카오톡이 썸네일을 읽습니다.
+       ?v= cache busting은 배포마다 server가 자동 부여합니다. 사진 교체 후엔 카카오 디버거로 재스크랩:
+       https://developers.kakao.com/tool/debugger/sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{GROOM_NAME}} ❤️ {{BRIDE_NAME}} 결혼합니다 🎉" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:title" content="{{GROOM_NAME}} ❤️ {{BRIDE_NAME}} 결혼합니다 🎉" />
+  <meta property="og:description" content="{{WEDDING_DATETIME_KO}} {{VENUE_NAME}} {{VENUE_HALL}}" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE_MAIN}}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1067" />
+  <meta property="og:image:height" content="1600" />
+  <meta property="og:image:alt" content="{{GROOM_NAME}} ❤️ {{BRIDE_NAME}} 결혼합니다 🎉" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- 본문은 Gowun Dodum, 제목은 Gowun Batang -->
+  <!-- 본문 폰트는 js/fonts.js 의 preset이 불러온다 (invitation.conf 의 FONT_KO 로 선택). -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <script src="js/fonts.js"></script>
+
+  <!-- main version style. base layout과 theme를 합친 단일 파일이다.
+       동작은 js/main.js가, 날짜와 사진과 profile 같은 내용은 js/config.js가 관리한다. -->
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+<div class="paper">
+
+  <!-- 표지 -->
+  <section class="cover">
+    <div class="small-cap rv in">WEDDING INVITATION</div>
+
+    <h1 class="rv in">
+      {{GROOM_NAME}}<span class="and">♥</span>{{BRIDE_NAME}}
+    </h1>
+
+    <div class="cover-date rv in">{{WEDDING_DATETIME_KO}}</div>
+    <div class="cover-local viewer-time rv in" data-viewer-time hidden></div>
+    <div class="cover-venue rv in">{{VENUE_NAME}} {{VENUE_HALL}}<br />{{VENUE_ADDRESS_FULL}}</div>
+
+    <!-- main 사진 (아치 frame) -->
+    <div class="arch-photo rv d1" id="mainPhoto"></div>
+
+    <!-- hidden page 입구. 예식 후에 노출된다. -->
+    <a class="release-banner" id="releaseBanner" href="release.html">
+      🌿 저희 부부가 되었어요 - 감사 인사 보기
+    </a>
+  </section>
+
+  <div class="divider">❀</div>
+
+
+  <!-- 인사말 -->
+  <section>
+    <!-- 인사말 제목과 본문은 invitation.conf 의 GREETING_TITLE_KO, GREETING_KO, GREETING_CLOSING_KO 에서 온다. -->
+    <div class="label-title rv">{{GREETING_TITLE_KO}}</div>
+
+    <div class="greeting rv d1">{{GREETING_KO_HTML}}</div>
+
+    <!-- 가족 소개 -->
+    <div class="family rv d2">
+      <div>
+        <span class="parents">{{GROOM_PARENTS}}</span><span class="rel">의 {{GROOM_RANK_KO}}</span> <b>{{GROOM_NAME_SHORT}}</b>
+      </div>
+      <div>
+        <span class="parents">{{BRIDE_PARENTS}}</span><span class="rel">의 {{BRIDE_RANK_KO}}</span> <b>{{BRIDE_NAME_SHORT}}</b>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">✿</div>
+
+
+  <!-- 예식 안내 -->
+  <section>
+    <div class="label rv">THE WEDDING DAY</div>
+    <div class="label-title rv">예식 일시</div>
+
+    <div class="rv d1">
+      <div class="when-date">{{WEDDING_DATE_KO}}</div>
+      <div class="when-time">{{WEDDING_TIME_KO}}</div>
+      <div class="when-note">{{TIME_BASIS_KO}}</div>
+      <div class="when-note">{{ARRIVE_NOTE_KO}}</div>
+      <div class="when-note viewer-time" data-viewer-time hidden></div>
+    </div>
+
+    <div class="dday rv d2">
+      <div class="dd-cell"><b id="cdD">0</b><span>일</span></div>
+      <div class="dd-cell"><b id="cdH">0</b><span>시간</span></div>
+      <div class="dd-cell"><b id="cdM">0</b><span>분</span></div>
+      <div class="dd-cell"><b id="cdS">0</b><span>초</span></div>
+    </div>
+
+    <div class="dday-note rv d2" id="ddayNote">
+      {{GROOM_NAME_SHORT}} ♥ {{BRIDE_NAME_SHORT}} 결혼식이 <b>0일</b> 남았습니다
+    </div>
+
+    <div class="cal rv d3">
+      <div class="cal-title" id="calTitle">{{WEDDING_YEAR_MONTH_KO}}</div>
+      <table id="calTable" aria-label="예식 달력"></table>
+    </div>
+  </section>
+
+  <div class="divider">❀</div>
+
+
+  <!-- 오시는 길 -->
+  <section>
+    <div class="label rv">LOCATION</div>
+    <div class="label-title rv">오시는 길</div>
+
+    <div class="venue-card rv d1">
+      <div class="vc-name">{{VENUE_NAME}} <small>{{VENUE_HALL}}</small></div>
+      <div class="vc-addr">{{VENUE_ADDRESS_FULL}}</div>
+      <div class="vc-sub">{{VENUE_NEAR}}</div>
+    </div>
+
+    <div class="btn-row rv d2">
+      <a class="btn" href="{{MAP_GOOGLE_URL}}" target="_blank" rel="noopener">Google 지도</a>
+      <button class="btn" id="copyAddr" type="button">주소 복사</button>
+    </div>
+
+    <!-- Google 지도 embed. 좌표가 있으면 js/config.js가 iframe을 넣는다. -->
+    <div class="map-embed rv d2" id="venueMap" aria-label="예식장 위치 지도">
+      <div class="map-note">Google 지도 버튼으로 길찾기를 열어주세요</div>
+    </div>
+
+    <div class="parking-note rv d3">
+      <div class="pn-title">🚗 오시는 방법</div>
+      {{INFO_TRANSIT}}
+    </div>
+
+    <div class="parking-note rv d3">
+      <div class="pn-title">🚗 주차 안내</div>
+      {{INFO_PARKING}}
+    </div>
+  </section>
+
+  <div class="divider">✿</div>
+
+
+  <!-- 안내 사항 -->
+  <section>
+    <div class="label rv">INFORMATION</div>
+    <div class="label-title rv">안내 사항</div>
+
+    <div class="parking-note rv d1">
+      <div class="pn-title">🍽 연회 &amp; 식사 안내</div>
+      {{INFO_MEAL}}
+    </div>
+  </section>
+
+  <div class="divider">❀</div>
+
+
+  <!-- 드레스 코드. invitation.conf 의 DRESS_CODE 를 비우면 section째 감춰진다. -->
+  <section class="dress-sec" data-hide-empty>
+    <div class="label rv">DRESS CODE</div>
+    <div class="label-title rv">{{DRESS_CODE}}</div>
+    <p class="gift-note dress-note rv">{{DRESS_CODE_NOTE}}</p>
+  </section>
+
+  <div class="divider">✿</div>
+
+
+  <!-- 마음 전하실 곳. 계좌가 하나도 없으면 private.js 가 section째 감춘다. -->
+  <section class="gift-sec">
+    <div class="label rv">WITH LOVE</div>
+    <div class="label-title rv">마음 전하실 곳</div>
+
+    <p class="gift-note rv">
+      참석이 어려우신 분들을 위해 기재했습니다.<br />
+      전해주시는 따뜻한 마음, 소중히 간직하겠습니다.
+    </p>
+
+    <!-- 계좌는 invitation.conf 에만 있다.
+         심어 둔 난독화 blob을 js/private.js가 풀어 그리며, 정적 파일에는 평문이 없다.
+         기본은 닫힌 상태이고 펼칠 때에만 render된다. -->
+    <details class="gift rv d1">
+      <summary>신랑 측 마음 전하실 곳 <span class="arrow">›</span></summary>
+      <div class="acc-list" data-acc="groom" data-copy-label="복사"></div>
+    </details>
+
+    <details class="gift rv d2">
+      <summary>신부 측 마음 전하실 곳 <span class="arrow">›</span></summary>
+      <div class="acc-list" data-acc="bride" data-copy-label="복사"></div>
+    </details>
+  </section>
+
+  <div class="divider">❀</div>
+
+
+  <!-- RSVP. 하객 명단 확정용 Google Form을 연다. 주소는 invitation.conf 의 RSVP_URL. -->
+  <section class="rsvp">
+    <div class="label rv">RSVP</div>
+    <div class="label-title rv">참석 여부 알려주기</div>
+    <!-- RSVP 안내문은 invitation.conf 의 RSVP_NOTE_KO 에서 온다(마감일 등). -->
+    <p class="gift-note rv">{{RSVP_NOTE_KO}}</p>
+    <a class="bless-btn rsvp-btn rv d1" href="{{RSVP_URL}}" target="_blank" rel="noopener">RSVP 응답하기 ✎</a>
+  </section>
+
+
+  <!-- 하단 전체폭 사진. PHOTO_BLESS 를 비우면 자리째 빠진다. -->
+  <img class="bless-photo rv" id="blessPhoto" alt="웨딩 사진" loading="lazy" />
+
+
+  <!-- footer -->
+  <footer>
+    <div class="thanks-line">저희 두 사람을 축복해 주셔서 감사합니다</div>
+    <div>{{GROOM_NAME}}, {{BRIDE_NAME}}</div>
+    <button class="share-btn" id="shareBtn" type="button">📤 청첩장 공유하기</button>
+    <div class="version-links">
+      <a class="version-link" href="en.html" lang="en">English</a>
+    </div>
+  </footer>
+</div>
+
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="사진 크게 보기">
+  <img id="lightboxImg" src="" alt="웨딩 사진" />
+  <div class="lb-cap" id="lightboxCap"></div>
+  <button class="lb-close" id="lbClose" type="button" aria-label="닫기">✕</button>
+  <button class="lb-prev" id="lbPrev" type="button" aria-label="이전 사진">‹</button>
+  <button class="lb-next" id="lbNext" type="button" aria-label="다음 사진">›</button>
+</div>
+
+<script src="js/config.js"></script>
+<!--#PRIVATE#--><script src="js/private.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

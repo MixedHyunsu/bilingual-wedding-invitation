@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-font="{{FONT_EN}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <title>{{GROOM_EN_FIRST}} &amp; {{BRIDE_EN_FIRST}} — We're getting married</title>
+  <meta name="description" content="{{WEDDING_DATETIME_EN}} · {{VENUE_NAME_EN}}, {{VENUE_NEAR_EN}}. {{GROOM_NAME_EN}} &amp; {{BRIDE_NAME_EN}} are getting married." />
+
+  <!-- 영어 version 공유 미리보기. og:image는 절대 URL이어야 합니다. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{GROOM_EN_FIRST}} &amp; {{BRIDE_EN_FIRST}} — Wedding Invitation" />
+  <meta property="og:locale" content="en_AU" />
+  <meta property="og:title" content="{{GROOM_EN_FIRST}} &amp; {{BRIDE_EN_FIRST}} — We're getting married" />
+  <meta property="og:description" content="{{WEDDING_DATETIME_EN}} · {{VENUE_NAME_EN}}, {{VENUE_NEAR_EN}}" />
+  <meta property="og:url" content="{{PAGE_URL}}" />
+  <meta property="og:image" content="{{OG_IMAGE_MAIN}}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1067" />
+  <meta property="og:image:height" content="1600" />
+  <meta property="og:image:alt" content="{{GROOM_EN_FIRST}} &amp; {{BRIDE_EN_FIRST}}" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- 본문 폰트는 js/fonts.js 의 preset이 불러온다 (invitation.conf 의 FONT_EN 으로 선택). -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <script src="js/fonts.js"></script>
+
+  <!-- main version과 같은 stylesheet를 쓴다. html[lang="en"] 일 때 font만 바뀐다. -->
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+<div class="paper">
+
+  <!-- cover -->
+  <section class="cover">
+	  
+	<h1 class="rv in">
+	{{GROOM_EN_FIRST}}<span class="and">♥</span>{{BRIDE_EN_FIRST}}
+	</h1>
+	<div class="small-cap rv in">invite you to celebrate their wedding</div>
+    <div class="cover-date rv in">{{WEDDING_DATETIME_EN}}</div>
+    <div class="cover-local viewer-time rv in" data-viewer-time hidden></div>
+    <div class="cover-venue rv in">{{VENUE_NAME_EN}}<br />{{VENUE_NEAR_EN}}</div>
+
+    <div class="arch-photo rv d1" id="mainPhoto"></div>
+
+    <!-- 예식 시각이 지나면 노출되는 감사 인사 page 입구 -->
+    <a class="release-banner" id="releaseBanner" href="en-release.html">
+      🌿 We're married — read our thank-you note
+    </a>
+  </section>
+
+  <div class="divider">❀</div>
+
+
+  <!-- invitation -->
+  <section>
+    <div class="label rv">INVITATION</div>
+    <!-- GREETING_TITLE_EN, GREETING_EN, GREETING_CLOSING_EN in invitation.conf. 본문이 비면 감춰진다. -->
+    <div class="label-title rv">{{GREETING_TITLE_EN}}</div>
+
+    <div class="greeting rv d1">{{GREETING_EN_HTML}}</div>
+
+
+    <div class="family rv d2">
+      <div><b>{{GROOM_NAME_EN}}</b></div>
+      <div><span class="rel">&amp;</span></div>
+      <div><b>{{BRIDE_NAME_EN}}</b></div>
+    </div>
+  </section>
+
+  <div class="divider">✿</div>
+
+
+  <!-- the day -->
+  <section>
+    <div class="label rv">THE WEDDING DAY</div>
+    <div class="rv d1">
+      <div class="when-date">{{WEDDING_DATE_EN}}</div>
+      <div class="when-time">{{WEDDING_TIME_EN_LONG}}</div>
+      <div class="when-note">{{TIME_BASIS_EN}}</div>
+      <div class="when-note">{{ARRIVE_NOTE_EN}}</div>
+      <div class="when-note viewer-time" data-viewer-time hidden></div>
+    </div>
+
+    <div class="dday rv d2">
+      <div class="dd-cell"><b id="cdD">0</b><span>days</span></div>
+      <div class="dd-cell"><b id="cdH">0</b><span>hours</span></div>
+      <div class="dd-cell"><b id="cdM">0</b><span>mins</span></div>
+      <div class="dd-cell"><b id="cdS">0</b><span>secs</span></div>
+    </div>
+
+    <div class="dday-note rv d2" id="ddayNote"></div>
+
+    <div class="cal rv d3">
+      <div class="cal-title" id="calTitle">{{WEDDING_MONTH_YEAR_EN}}</div>
+      <table id="calTable" aria-label="Wedding calendar"></table>
+    </div>
+  </section>
+
+  <div class="divider">❀</div>
+
+
+  <!-- location -->
+  <section>
+    <div class="label rv">LOCATION</div>
+    <div class="label-title rv">The Venue</div>
+
+    <div class="venue-card rv d1">
+      <div class="vc-name">{{VENUE_NAME_EN}} <small>{{VENUE_HALL_EN}}</small></div>
+      <div class="vc-addr">{{VENUE_ADDRESS_EN}}</div>
+      <div class="vc-sub">{{VENUE_NEAR_EN}}</div>
+    </div>
+
+    <div class="btn-row rv d2">
+      <a class="btn" href="{{MAP_GOOGLE_URL}}" target="_blank" rel="noopener">Google Maps</a>
+      <button class="btn" id="copyAddr" type="button">Copy address</button>
+    </div>
+
+    <div class="map-embed rv d2" id="venueMap" aria-label="Venue map">
+      <div class="map-note">Tap “Google Maps” for directions</div>
+    </div>
+
+    <div class="parking-note rv d3">
+      <div class="pn-title">🚗 Getting there</div>
+      {{INFO_TRANSIT_EN}}
+    </div>
+
+    <div class="parking-note rv d3">
+      <div class="pn-title">🅿️ Parking</div>
+      {{INFO_PARKING_EN}}
+    </div>
+  </section>
+
+  <div class="divider">✿</div>
+
+  <!-- Dress code. Leave DRESS_CODE_EN empty in invitation.conf to hide this section. -->
+  <section class="dress-sec" data-hide-empty>
+    <div class="label rv">DRESS CODE</div>
+    <div class="label-title rv">{{DRESS_CODE_EN}}</div>
+    <p class="gift-note dress-note rv">{{DRESS_CODE_NOTE_EN}}</p>
+  </section>
+
+  <div class="divider">✿</div>
+
+
+  <!-- RSVP. Google Form (RSVP_URL in invitation.conf). -->
+  <section class="rsvp">
+    <div class="label rv">RSVP</div>
+    <div class="label-title rv">Will You Join Us?</div>
+    <!-- RSVP note comes from RSVP_NOTE_EN in invitation.conf (deadline etc.). -->
+    <p class="gift-note rv">{{RSVP_NOTE_EN}}</p>
+    <a class="bless-btn rsvp-btn rv d1" href="{{RSVP_URL}}" target="_blank" rel="noopener">RSVP now ✎</a>
+  </section>
+
+
+  <!-- 하단 전체폭 사진. PHOTO_BLESS 를 비우면 자리째 빠진다. -->
+  <img class="bless-photo rv" id="blessPhoto" alt="Wedding photo" loading="lazy" />
+
+
+  <footer>
+    <div class="thanks-line">Thank you for celebrating with us</div>
+    <div>{{GROOM_EN_FIRST}} &amp; {{BRIDE_EN_FIRST}}</div>
+    <button class="share-btn" id="shareBtn" type="button">📤 Share this invitation</button>
+    <div class="version-links">
+      <a class="version-link" href="main.html" lang="ko">한국어</a>
+    </div>
+  </footer>
+</div>
+
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Photo viewer">
+  <img id="lightboxImg" src="" alt="Wedding photo" />
+  <div class="lb-cap" id="lightboxCap"></div>
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close">✕</button>
+  <button class="lb-prev" id="lbPrev" type="button" aria-label="Previous photo">‹</button>
+  <button class="lb-next" id="lbNext" type="button" aria-label="Next photo">›</button>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

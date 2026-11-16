@@ -1,0 +1,36 @@
+# 개인정보와 산출물을 추적하지 않습니다.
+# 이 저장소를 fork하거나 공유해도 두 사람의 정보가 따라가지 않습니다.
+
+# --- 개인정보 ---
+# 이름, 예식 정보, 계좌번호, API key가 모두 이 파일에 들어갑니다. 절대 commit하지 않습니다.
+# 추적하는 것은 가상 데이터만 담긴 invitation.conf.example 하나입니다.
+invitation.conf
+*.conf
+!invitation.conf.example
+
+# --- 사진 ---
+# 두 사람의 사진은 추적하지 않습니다. 함께 들어 있는 demo-*.jpg 와 README만 예외입니다.
+src/photos/*
+!src/photos/README.md
+!src/photos/demo-*.jpg
+
+# --- build 산출물 ---
+# 계좌가 난독화되어 들어 있고, 사진과 이름이 치환된 결과물입니다.
+dist/
+
+# --- OS와 편집기 ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# --- local 작업용 ---
+.preview/
+CLAUDE.md
+AGENTS.md
+.claude/
+node_modules/
